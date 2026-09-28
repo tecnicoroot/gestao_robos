@@ -24,7 +24,7 @@ class MysqlSettings:
 
 @dataclass(frozen=True)
 class DatabaseSettings:
-    """Configurações completas de acesso ao banco."""
+    """Configurações completas do banco de dados."""
 
     ssh: SshSettings
     mysql: MysqlSettings

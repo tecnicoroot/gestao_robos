@@ -3,6 +3,7 @@ from collections.abc import Callable
 import flet as ft
 
 from gestao_robos.core.theme import AppTheme
+from gestao_robos.services.robot_service import RobotService
 from gestao_robos.ui.dashboard_page import DashboardPage
 from gestao_robos.ui.executions_page import ExecutionsPage
 from gestao_robos.ui.robots_page import RobotsPage
@@ -12,14 +13,17 @@ class MainPage:
     """Tela principal da aplicação."""
 
     def __init__(
-        self,
+         self,
         page: ft.Page,
         username: str,
         on_logout: Callable[[], None],
+        robot_service: RobotService,
     ) -> None:
         self.page = page
         self.username = username
         self.on_logout = on_logout
+
+        self.robot_service = robot_service
 
         self.content_area = ft.Container(
             expand=True,
@@ -323,7 +327,9 @@ class MainPage:
         """Constrói o conteúdo da página selecionada."""
 
         if self.selected_page == "robots":
-            return RobotsPage().build()
+            return RobotsPage(
+                robot_service=self.robot_service,
+            ).build()
 
         if self.selected_page == "executions":
             return ExecutionsPage().build()

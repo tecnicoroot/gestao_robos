@@ -1,5 +1,7 @@
-from datetime import time
+from datetime import time, timedelta
 from typing import Any, cast
+
+from pymysql.cursors import DictCursor
 
 from gestao_robos.domain.entities.robot import Robot
 from gestao_robos.infrastructure.database.connection import DatabaseConnection
@@ -47,7 +49,7 @@ class MySQLRobotRepository(RobotRepository):
         """
 
         with self.database.connection() as connection:
-            cursor = connection.cursor(dictionary=True)
+            cursor = connection.cursor(DictCursor)
 
             try:
                 cursor.execute(query)
@@ -63,19 +65,46 @@ class MySQLRobotRepository(RobotRepository):
     def find_by_id(self, robot_id: int) -> Robot | None:
         """Busca um robô pelo ID."""
 
+        query = """
+                    SELECT
+                        id,
+                        nome,
+                        descricao,
+                        ativo,
+                        intervalo,
+                        acao,
+                        tela,
+                        path_executavel,
+                        limite_tempo,
+                        arquivo_ativacao,
+                        nome_executavel,
+                        pasta_trabalho,
+                        repositorio_planilhas,
+                        notificados,
+                        pgm_ativado1,
+                        pgm_ativado2,
+                        robo_sequencia,
+                        usuario_robo,
+                        robo_teste,
+                        horario_ativacao,
+                        codigo_setor,
+                        biblioteca
+                    FROM robos
+                    where id =  %s
+                    ORDER BY nome
+                """
        
         with self.database.connection() as connection:
-            cursor = connection.cursor(dictionary=True)
+            cursor = connection.cursor(DictCursor)
 
             try:
+                cursor.execute(query, (robot_id,))
                 row = cursor.fetchone()
 
                 if row is None:
                     return None
 
-                return self._row_to_robot(
-                    cast(RobotRow, row),
-                )
+                return self._row_to_robot(row)
 
             finally:
                 cursor.close()
@@ -263,16 +292,47 @@ class MySQLRobotRepository(RobotRepository):
         raise TypeError(f"Valor inválido para {column}: {value!r}")
 
     @staticmethod
+    def _get_nullable_int(
+        row: dict[str, object],
+        column: str,
+    ) -> int | None:
+        value = row[column]
+
+        if value is None:
+            return None
+
+        if isinstance(value, int):
+            return value
+
+        if isinstance(value, str):
+            return int(value)
+
+        raise TypeError(f"Valor inválido para {column}: {value!r}")
+
+    @staticmethod
     def _get_time(
         row: dict[str, object],
         column: str,
-    ) -> time:
-        """Obtém um horário de uma linha do banco."""
-
+    ) -> time | None:
         value = row[column]
+
+        if value is None:
+            return None
 
         if isinstance(value, time):
             return value
+
+        if isinstance(value, timedelta):
+            total_seconds = int(value.total_seconds())
+
+            hours, remainder = divmod(total_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+
+            return time(
+                hour=hours,
+                minute=minutes,
+                second=seconds,
+            )
 
         raise TypeError(f"Valor inválido para {column}: {value!r}")
 
@@ -324,7 +384,7 @@ class MySQLRobotRepository(RobotRepository):
                 row,
                 "pgm_ativado2",
             ),
-            robo_sequencia=cls._get_int(
+            robo_sequencia=cls._get_nullable_int(
                 row,
                 "robo_sequencia",
             ),

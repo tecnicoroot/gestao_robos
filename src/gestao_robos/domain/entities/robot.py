@@ -22,10 +22,10 @@ class Robot:
     notificados: str
     pgm_ativado1: str
     pgm_ativado2: str
-    robo_sequencia: int
+    robo_sequencia: int | None
     usuario_robo: str
     robo_teste: int
-    horario_ativacao: time
+    horario_ativacao: time | None
     codigo_setor: int
     biblioteca: str
 

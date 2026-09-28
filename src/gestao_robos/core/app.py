@@ -1,7 +1,17 @@
+from pathlib import Path
+
 import flet as ft
 
 from gestao_robos.core.theme import AppTheme
+from gestao_robos.infrastructure.database.config import (
+    load_database_settings,
+)
+from gestao_robos.infrastructure.database.connection import DatabaseConnection
+from gestao_robos.infrastructure.database.mysql_robot_repository import (
+    MySQLRobotRepository,
+)
 from gestao_robos.services.authentication import AuthenticationService
+from gestao_robos.services.robot_service import RobotService
 from gestao_robos.ui.login_page import LoginPage
 from gestao_robos.ui.main_page import MainPage
 
@@ -11,29 +21,39 @@ class App:
 
     def __init__(self, page: ft.Page) -> None:
         self.page = page
+
         self.authentication = AuthenticationService()
+
+        database_settings = load_database_settings(
+            key_path=Path(r"C:\martin\am.key"),
+            config_path=Path(r"C:\martin\am.cfg"),
+        )
+
+        database = DatabaseConnection(database_settings)
+        robot_repository = MySQLRobotRepository(database)
+
+        self.robot_service = RobotService(robot_repository)
+
         self.current_user: str | None = None
 
         self._configure_page()
 
     def _configure_page(self) -> None:
+        """Configura a janela e o tema da aplicação."""
         self.page.title = "Gestão de Robôs"
-
         self.page.window.width = 1000
         self.page.window.height = 700
-
         self.page.window.min_width = 800
         self.page.window.min_height = 500
 
         AppTheme.configure(self.page)
 
     def start(self) -> None:
-        """Inicia a aplicação exibindo a tela de login."""
+        """Inicia a aplicação."""
         self.show_login()
 
     def show_login(self) -> None:
         """Exibe a tela de login."""
-
         self.current_user = None
 
         login_page = LoginPage(
@@ -51,7 +71,6 @@ class App:
         password: str,
     ) -> bool:
         """Autentica o usuário."""
-
         authenticated = self.authentication.authenticate(
             username,
             password,
@@ -61,14 +80,12 @@ class App:
             return False
 
         self.current_user = username
-
         self.show_main()
 
         return True
 
     def show_main(self) -> None:
         """Exibe a tela principal."""
-
         if self.current_user is None:
             self.show_login()
             return
@@ -77,6 +94,7 @@ class App:
             page=self.page,
             username=self.current_user,
             on_logout=self.show_login,
+            robot_service=self.robot_service,
         )
 
         self.page.clean()

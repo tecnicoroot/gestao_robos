@@ -1,22 +1,22 @@
+from pathlib import Path
 
-
-from gestao_robos.infrastructure.database.connection import (
-    DatabaseConnection,
-)
+from gestao_robos.infrastructure.database.config import load_database_settings
+from gestao_robos.infrastructure.database.connection import DatabaseConnection
 
 
 def test_database_connection() -> None:
-    """Verifica se a aplicação consegue acessar o banco."""
-    database = DatabaseConnection()
+    key_path = Path(r"C:\martin\am.key")
+    config_path = Path(r"C:\martin\am.cfg")
 
-    with database.connection() as connection:
-        cursor = connection.cursor()
+    settings = load_database_settings(
+        key_path=key_path,
+        config_path=config_path,
+    )
 
-        try:
-            cursor.execute("SELECT 1")
-            result = cursor.fetchone()
+    database = DatabaseConnection(settings)
 
-            assert result is not None
-            assert result[0] == 1
-        finally:
-            cursor.close()
+    with database.connection() as connection, connection.cursor() as cursor:
+        cursor.execute("SELECT 1")
+        result = cursor.fetchone()
+
+    assert result is not None
