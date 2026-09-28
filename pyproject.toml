@@ -8,8 +8,10 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "cryptography>=50.0.1",
     "flet>=1.0.1",
-    "mysql-connector-python>=26.7.0",
+    "pymysql>=1.2.3",
+    "sshtunnel>=0.4.0",
 ]
 
 [project.scripts]
@@ -26,6 +28,7 @@ dev = [
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
     "ruff>=0.16.9",
+    "types-pymysql>=1.2.0.20260923",
 ]
 
 [tool.ruff]
