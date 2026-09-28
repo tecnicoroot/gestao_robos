@@ -147,36 +147,20 @@ class MainPage:
         icon_control = ft.Icon(
             icon,
             size=20,
-            color=(
-                AppTheme.PRIMARY
-                if selected
-                else AppTheme.TEXT_SECONDARY
-            ),
+            color=(AppTheme.PRIMARY if selected else AppTheme.TEXT_SECONDARY),
         )
 
         text_control = ft.Text(
             label,
             size=14,
-            weight=(
-                ft.FontWeight.W_600
-                if selected
-                else ft.FontWeight.NORMAL
-            ),
-            color=(
-                AppTheme.PRIMARY
-                if selected
-                else AppTheme.TEXT_PRIMARY
-            ),
+            weight=(ft.FontWeight.W_600 if selected else ft.FontWeight.NORMAL),
+            color=(AppTheme.PRIMARY if selected else AppTheme.TEXT_PRIMARY),
         )
 
         item = ft.Container(
             height=44,
             border_radius=8,
-            bgcolor=(
-                AppTheme.PRIMARY_CONTAINER
-                if selected
-                else None
-            ),
+            bgcolor=(AppTheme.PRIMARY_CONTAINER if selected else None),
             padding=ft.Padding.symmetric(horizontal=12),
             ink=True,
             ink_color=AppTheme.PRIMARY_CONTAINER,
@@ -213,14 +197,10 @@ class MainPage:
         if item is None:
             return
 
-        item.bgcolor = (
-            AppTheme.BACKGROUND
-            if hovering
-            else None
-        )
+        item.bgcolor = AppTheme.BACKGROUND if hovering else None
 
         self.page.update()
-    
+
     def _build_user_area(self) -> ft.Control:
         """Cria a área do usuário."""
 
@@ -322,7 +302,7 @@ class MainPage:
                 ],
             ),
         )
-    
+
     def _select_page(self, page_key: str) -> None:
         """Seleciona uma página da aplicação."""
 
@@ -358,11 +338,7 @@ class MainPage:
         for page_key, item in self.navigation_items.items():
             selected = page_key == self.selected_page
 
-            item.bgcolor = (
-                AppTheme.PRIMARY_CONTAINER
-                if selected
-                else None
-            )
+            item.bgcolor = AppTheme.PRIMARY_CONTAINER if selected else None
 
             row = item.content
 
@@ -373,24 +349,12 @@ class MainPage:
             label = row.controls[1]
 
             if isinstance(icon, ft.Icon):
-                icon.color = (
-                    AppTheme.PRIMARY
-                    if selected
-                    else AppTheme.TEXT_SECONDARY
-                )
+                icon.color = AppTheme.PRIMARY if selected else AppTheme.TEXT_SECONDARY
 
             if isinstance(label, ft.Text):
-                label.color = (
-                    AppTheme.PRIMARY
-                    if selected
-                    else AppTheme.TEXT_PRIMARY
-                )
+                label.color = AppTheme.PRIMARY if selected else AppTheme.TEXT_PRIMARY
 
-                label.weight = (
-                    ft.FontWeight.W_600
-                    if selected
-                    else ft.FontWeight.NORMAL
-                )
+                label.weight = ft.FontWeight.W_600 if selected else ft.FontWeight.NORMAL
 
     def _build_dashboard(self) -> ft.Control:
         """Cria o conteúdo inicial do dashboard."""
@@ -451,8 +415,7 @@ class MainPage:
                                     color=AppTheme.TEXT_PRIMARY,
                                 ),
                                 ft.Text(
-                                    "Utilize o menu lateral para "
-                                    "gerenciar seus robôs.",
+                                    "Utilize o menu lateral para gerenciar seus robôs.",
                                     size=14,
                                     color=AppTheme.TEXT_SECONDARY,
                                 ),

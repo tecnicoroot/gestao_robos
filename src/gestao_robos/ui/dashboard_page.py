@@ -68,8 +68,7 @@ class DashboardPage:
                                     color=AppTheme.TEXT_PRIMARY,
                                 ),
                                 ft.Text(
-                                    "Utilize o menu lateral para "
-                                    "gerenciar seus robôs.",
+                                    "Utilize o menu lateral para gerenciar seus robôs.",
                                     size=14,
                                     color=AppTheme.TEXT_SECONDARY,
                                 ),

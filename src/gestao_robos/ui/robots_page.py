@@ -53,8 +53,7 @@ class RobotsPage:
                                     color=AppTheme.TEXT_PRIMARY,
                                 ),
                                 ft.Text(
-                                    "O gerenciamento dos robôs "
-                                    "será implementado aqui.",
+                                    "O gerenciamento dos robôs será implementado aqui.",
                                     size=14,
                                     color=AppTheme.TEXT_SECONDARY,
                                 ),

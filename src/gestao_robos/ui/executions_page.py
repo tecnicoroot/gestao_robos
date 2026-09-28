@@ -53,8 +53,7 @@ class ExecutionsPage:
                                     color=AppTheme.TEXT_PRIMARY,
                                 ),
                                 ft.Text(
-                                    "O histórico de execuções "
-                                    "será exibido aqui.",
+                                    "O histórico de execuções será exibido aqui.",
                                     size=14,
                                     color=AppTheme.TEXT_SECONDARY,
                                 ),

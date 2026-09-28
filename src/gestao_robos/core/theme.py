@@ -28,7 +28,6 @@ class AppTheme:
     SIDEBAR_WIDTH = 240
     HEADER_HEIGHT = 64
 
-    
     @classmethod
     def configure(cls, page: ft.Page) -> None:
         """Configura o tema global da aplicação."""
