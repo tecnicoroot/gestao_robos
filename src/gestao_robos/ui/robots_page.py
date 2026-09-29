@@ -107,32 +107,39 @@ class RobotsPage:
 
     def _build_header(self) -> ft.Control:
         """Constrói o cabeçalho da página."""
-        return ft.Row(
-            controls=[
-                ft.Column(
-                    controls=[
-                        ft.Text(
-                            "Robôs",
-                            size=28,
-                            weight=ft.FontWeight.BOLD,
-                        ),
-                        ft.Text(
-                            "Gerenciamento dos robôs cadastrados.",
-                            size=14,
-                            color=ft.Colors.GREY_600,
-                        ),
-                    ],
-                    spacing=4,
-                    expand=True,
-                ),
-                ft.Button(
-                    content="Novo Robô",
-                    icon=ft.Icons.ADD,
-                    disabled=False,
-                    on_click=self._open_new_robot,
-                ),
-            ],
-            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+        return ft.Container(
+            padding=ft.Padding(
+                top=0,
+                right=0,
+                bottom=8,
+                left=0,
+            ),
+            content=ft.Row(
+                controls=[
+                    ft.Column(
+                        controls=[
+                            ft.Text(
+                                "Robôs",
+                                size=28,
+                                weight=ft.FontWeight.BOLD,
+                            ),
+                            ft.Text(
+                                "Gerenciamento dos robôs cadastrados.",
+                                size=14,
+                                color=ft.Colors.GREY_600,
+                            ),
+                        ],
+                        spacing=4,
+                        expand=True,
+                    ),
+                    ft.Button(
+                        content="Novo Robô",
+                        icon=ft.Icons.ADD,
+                        on_click=self._open_new_robot,
+                    ),
+                ],
+                spacing=16,
+            ),
         )
 
     def _build_search_bar(self) -> ft.Control:
@@ -141,7 +148,11 @@ class RobotsPage:
             content=ft.Row(
                 controls=[
                     self.search_field,
-                    self.count_text,
+                    ft.Container(
+                        width=100,
+                        alignment=ft.Alignment.CENTER_RIGHT,
+                        content=self.count_text,
+                    ),
                 ],
                 spacing=16,
             ),
@@ -227,7 +238,7 @@ class RobotsPage:
                             ft.DataColumn(label="Usuário"),
                         ],
                         rows=rows,
-                        column_spacing=24,
+                        column_spacing=20,
                         heading_row_height=48,
                         data_row_min_height=56,
                        
@@ -368,6 +379,10 @@ class RobotsPage:
                                 ],
                                 expand=True,
                             ),
+                        ] ,  
+                    ),
+                    ft.Row(
+                        controls=[
                             ft.Column(
                                 controls=[
                                     ft.Text(
@@ -390,6 +405,7 @@ class RobotsPage:
                                         on_click=self._toggle_robot_status,
                                     ),
                                 ],
+                                expand=True,
                             ),
                             ft.Column(
                                 controls=[
@@ -402,8 +418,10 @@ class RobotsPage:
                                         f"{robot.intervalo} minutos",
                                     ),
                                 ],
+                                expand=True,
                             ),
                         ],
+                        spacing=24,
                     ),
                     ft.Column(
                         controls=[

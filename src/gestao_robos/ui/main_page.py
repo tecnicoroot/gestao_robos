@@ -24,11 +24,16 @@ class MainPage:
         self.on_logout = on_logout
 
         self.robot_service = robot_service
+        self.sidebar_container = ft.Container()
 
+        self.sidebar_collapsed = False
+        self.sidebar_manual = False
+        
         self.content_area = ft.Container(
             expand=True,
         )
         self.selected_page = "dashboard"
+        self.sidebar_collapsed = False
         self.navigation_items: dict[str, ft.Container] = {}
         self.navigation_hover: dict[str, bool] = {}
         self.page_title = ft.Text(
@@ -37,6 +42,16 @@ class MainPage:
             weight=ft.FontWeight.BOLD,
             color=AppTheme.TEXT_PRIMARY,
         )
+
+    def _toggle_sidebar(
+        self,
+        e: ft.Event[ft.IconButton],
+    ) -> None:
+        """Alterna entre sidebar expandida e recolhida."""
+
+        self.sidebar_collapsed = not self.sidebar_collapsed
+        self._update_sidebar()
+        self.page.update()
 
     def _get_page_title(self) -> str:
         """Retorna o título da página selecionada."""
@@ -54,12 +69,13 @@ class MainPage:
 
     def build(self) -> ft.Control:
         """Constrói a tela principal."""
+        self.sidebar_container.content = self._build_sidebar()
 
         return ft.Row(
             expand=True,
             spacing=0,
             controls=[
-                self._build_sidebar(),
+                self.sidebar_container,
                 ft.VerticalDivider(
                     width=1,
                     thickness=1,
@@ -70,11 +86,16 @@ class MainPage:
 
     def _build_sidebar(self) -> ft.Control:
         """Cria a barra lateral."""
+        width = (
+            72
+            if self.sidebar_collapsed
+            else AppTheme.SIDEBAR_WIDTH
+        )
 
         return ft.Container(
-            width=AppTheme.SIDEBAR_WIDTH,
+            width=width,
             bgcolor=AppTheme.SURFACE,
-            padding=16,
+            padding=12 if self.sidebar_collapsed else 16,
             content=ft.Column(
                 spacing=8,
                 controls=[
@@ -89,6 +110,24 @@ class MainPage:
 
     def _build_sidebar_header(self) -> ft.Control:
         """Cria o cabeçalho da barra lateral."""
+        if self.sidebar_collapsed:
+            return ft.Row(
+                alignment=ft.MainAxisAlignment.CENTER,
+                controls=[
+                    ft.Container(
+                        width=42,
+                        height=42,
+                        border_radius=21,
+                        bgcolor=AppTheme.PRIMARY_CONTAINER,
+                        alignment=ft.Alignment.CENTER,
+                        content=ft.Icon(
+                            ft.Icons.SMART_TOY_OUTLINED,
+                            color=AppTheme.PRIMARY,
+                            size=24,
+                        ),
+                    ),
+                ],
+            )
 
         return ft.Row(
             spacing=12,
@@ -147,6 +186,34 @@ class MainPage:
         """Cria um item de navegação."""
 
         selected = self.selected_page == page_key
+        if self.sidebar_collapsed:
+            return ft.Container(
+                width=48,
+                height=44,
+                border_radius=8,
+                bgcolor=(
+                    AppTheme.PRIMARY_CONTAINER
+                    if selected
+                    else None
+                ),
+                alignment=ft.Alignment.CENTER,
+                ink=True,
+                ink_color=AppTheme.PRIMARY_CONTAINER,
+                on_hover=lambda e: self._navigation_hover(
+                    page_key,
+                    e.data == "true",
+                ),
+                on_click=lambda e: self._select_page(page_key),
+                content=ft.Icon(
+                    icon,
+                    size=20,
+                    color=(
+                        AppTheme.PRIMARY
+                        if selected
+                        else AppTheme.TEXT_SECONDARY
+                    ),
+                ),
+            )
 
         icon_control = ft.Icon(
             icon,
@@ -207,6 +274,31 @@ class MainPage:
 
     def _build_user_area(self) -> ft.Control:
         """Cria a área do usuário."""
+
+        if self.sidebar_collapsed:
+            return ft.Column(
+                spacing=8,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                controls=[
+                    ft.Divider(
+                        height=1,
+                        color=AppTheme.BORDER,
+                    ),
+                    ft.Container(
+                        width=36,
+                        height=36,
+                        border_radius=18,
+                        bgcolor=AppTheme.PRIMARY_CONTAINER,
+                        alignment=ft.Alignment.CENTER,
+                        content=ft.Text(
+                            self.username[:1].upper(),
+                            size=14,
+                            weight=ft.FontWeight.BOLD,
+                            color=AppTheme.PRIMARY,
+                        ),
+                    ),
+                ],
+            )
 
         return ft.Column(
             spacing=8,
@@ -285,7 +377,20 @@ class MainPage:
             bgcolor=AppTheme.SURFACE,
             padding=ft.Padding.symmetric(horizontal=24),
             content=ft.Row(
-                controls=[
+                    controls=[
+                        ft.IconButton(
+                            icon=(
+                                ft.Icons.MENU_OPEN
+                                if not self.sidebar_collapsed
+                                else ft.Icons.MENU
+                            ),
+                            tooltip=(
+                                "Recolher menu"
+                                if not self.sidebar_collapsed
+                                else "Expandir menu"
+                            ),
+                            on_click=self._toggle_sidebar,
+                        ),
                     self.page_title,
                     ft.Container(expand=True),
                     ft.Row(
@@ -484,3 +589,11 @@ class MainPage:
         """Realiza o logout do usuário."""
 
         self.on_logout()
+
+    def _update_sidebar(self) -> None:
+        """Atualiza a barra lateral."""
+        self.sidebar_container.content = self._build_sidebar()
+        self.sidebar_container.update()
+
+
+   
