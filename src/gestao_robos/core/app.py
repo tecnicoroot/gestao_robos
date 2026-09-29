@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import flet as ft
 
 from gestao_robos.core.theme import AppTheme
@@ -24,10 +22,7 @@ class App:
 
         self.authentication = AuthenticationService()
 
-        database_settings = load_database_settings(
-            key_path=Path(r"C:\martin\am.key"),
-            config_path=Path(r"C:\martin\am.cfg"),
-        )
+        database_settings = load_database_settings()
 
         database = DatabaseConnection(database_settings)
         robot_repository = MySQLRobotRepository(database)

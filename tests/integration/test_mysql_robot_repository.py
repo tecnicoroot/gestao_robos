@@ -1,4 +1,3 @@
-from pathlib import Path
 
 from gestao_robos.infrastructure.database.config import load_database_settings
 from gestao_robos.infrastructure.database.connection import DatabaseConnection
@@ -8,10 +7,7 @@ from gestao_robos.infrastructure.database.mysql_robot_repository import (
 
 
 def test_find_all_robots() -> None:
-    settings = load_database_settings(
-        key_path=Path(r"C:\martin\am.key"),
-        config_path=Path(r"C:\martin\am.cfg"),
-    )
+    settings = load_database_settings()
 
     database = DatabaseConnection(settings)
     repository = MySQLRobotRepository(database)
@@ -22,10 +18,7 @@ def test_find_all_robots() -> None:
     assert all(robot.id is not None for robot in robots)
 
 def test_find_robot_by_id() -> None:
-    settings = load_database_settings(
-        key_path=Path(r"C:\martin\am.key"),
-        config_path=Path(r"C:\martin\am.cfg"),
-    )
+    settings = load_database_settings()
 
     database = DatabaseConnection(settings)
     repository = MySQLRobotRepository(database)

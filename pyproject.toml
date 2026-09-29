@@ -12,6 +12,7 @@ dependencies = [
     "flet>=1.0.1",
     "paramiko<4",
     "pymysql>=1.2.3",
+    "python-dotenv>=1.2.3",
     "sshtunnel>=0.4.0",
 ]
 

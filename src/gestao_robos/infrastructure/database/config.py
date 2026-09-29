@@ -1,4 +1,7 @@
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 from gestao_robos.infrastructure.database.settings import (
     DatabaseSettings,
@@ -7,12 +10,26 @@ from gestao_robos.infrastructure.database.settings import (
 )
 from gestao_robos.infrastructure.security.credentials import CredentialLoader
 
+load_dotenv()
 
-def load_database_settings(
-    key_path: Path,
-    config_path: Path,
-) -> DatabaseSettings:
+
+def _get_required_env(name: str) -> str:
+    """Retorna uma variável de ambiente obrigatória."""
+    value = os.getenv(name)
+
+    if not value:
+        raise ValueError(
+            f"A variável de ambiente '{name}' não foi configurada."
+        )
+
+    return value
+
+
+def load_database_settings() -> DatabaseSettings:
     """Carrega as credenciais e monta as configurações do banco."""
+
+    key_path = Path(_get_required_env("GESTAO_ROBOS_KEY_PATH"))
+    config_path = Path(_get_required_env("GESTAO_ROBOS_CONFIG_PATH"))
 
     credentials = CredentialLoader(
         key_path=key_path,
