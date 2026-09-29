@@ -28,14 +28,28 @@ class RobotService:
         robot_id: int,
         nome: str,
         descricao: str,
+        intervalo: int,
+        limite_tempo: int,
+        nome_executavel: str,
+        path_executavel: str,
+        usuario_robo: str,
     ) -> Robot:
-        """Atualiza os dados básicos de um robô."""
+        """Atualiza os dados editáveis de um robô."""
         robot = self.repository.find_by_id(robot_id)
 
         if robot is None:
-            raise ValueError(f"Robô {robot_id} não encontrado.")
+            raise ValueError(
+                f"Robô {robot_id} não encontrado."
+            )
 
         robot.update(nome, descricao)
+
+        robot.intervalo = intervalo
+        robot.limite_tempo = limite_tempo
+        robot.nome_executavel = nome_executavel.strip()
+        robot.path_executavel = path_executavel.strip()
+        robot.usuario_robo = usuario_robo.strip()
+
         return self.repository.save(robot)
 
     def activate_robot(self, robot_id: int) -> Robot:

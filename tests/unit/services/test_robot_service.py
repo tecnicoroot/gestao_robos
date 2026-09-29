@@ -166,6 +166,11 @@ def test_update_robot() -> None:
         robot_id=51,
         nome="Robô atualizado",
         descricao="Nova descrição",
+        intervalo=180,
+        limite_tempo=480,
+        nome_executavel="robo.exe",
+        path_executavel=r"C:\robos",
+        usuario_robo="usuario",
     )
 
     assert updated_robot.id == 51
@@ -190,6 +195,11 @@ def test_update_robot_raises_when_not_found() -> None:
             robot_id=999,
             nome="Robô",
             descricao="Descrição",
+            intervalo=180,
+            limite_tempo=480,
+            nome_executavel="robo.exe",
+            path_executavel=r"C:\robos",
+            usuario_robo="usuario",
         )
 
 
@@ -204,6 +214,11 @@ def test_update_robot_rejects_empty_name() -> None:
             robot_id=51,
             nome="   ",
             descricao="Descrição",
+            intervalo=180,
+            limite_tempo=480,
+            nome_executavel="robo.exe",
+            path_executavel=r"C:\robos",
+            usuario_robo="usuario",
         )
 
 
