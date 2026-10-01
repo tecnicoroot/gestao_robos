@@ -1,3 +1,5 @@
+from datetime import time
+
 from gestao_robos.domain.entities.robot import Robot
 from gestao_robos.repositories.robot_repository import RobotRepository
 
@@ -33,6 +35,16 @@ class RobotService:
         nome_executavel: str,
         path_executavel: str,
         usuario_robo: str,
+        acao: str,
+        tela: str,
+        arquivo_ativacao: str,
+        pasta_trabalho: str,
+        repositorio_planilhas: str,
+        notificados: str,
+        pgm_ativado1: str,
+        pgm_ativado2: str,
+        horario_ativacao: time | None,
+        codigo_setor: int,
     ) -> Robot:
         """Atualiza os dados editáveis de um robô."""
         robot = self.repository.find_by_id(robot_id)
@@ -49,7 +61,16 @@ class RobotService:
         robot.nome_executavel = nome_executavel.strip()
         robot.path_executavel = path_executavel.strip()
         robot.usuario_robo = usuario_robo.strip()
-
+        robot.acao = acao.strip()
+        robot.tela = tela.strip()
+        robot.arquivo_ativacao = arquivo_ativacao.strip()
+        robot.pasta_trabalho = pasta_trabalho.strip()
+        robot.repositorio_planilhas = repositorio_planilhas.strip()
+        robot.notificados = notificados.strip()
+        robot.pgm_ativado1 = pgm_ativado1.strip()
+        robot.pgm_ativado2 = pgm_ativado2.strip()
+        robot.horario_ativacao = horario_ativacao
+        robot.codigo_setor = codigo_setor
         return self.repository.save(robot)
 
     def activate_robot(self, robot_id: int) -> Robot:

@@ -433,6 +433,7 @@ class MainPage:
 
         if self.selected_page == "robots":
             return RobotsPage(
+                page=self.page,
                 robot_service=self.robot_service,
             ).build()
 

@@ -171,6 +171,16 @@ def test_update_robot() -> None:
         nome_executavel="robo.exe",
         path_executavel=r"C:\robos",
         usuario_robo="usuario",
+        acao="A",
+        tela="N",
+        arquivo_ativacao="",
+        pasta_trabalho="",
+        repositorio_planilhas="",
+        notificados="",
+        pgm_ativado1="",
+        pgm_ativado2="",
+        horario_ativacao=None,
+        codigo_setor=1,
     )
 
     assert updated_robot.id == 51
@@ -193,13 +203,23 @@ def test_update_robot_raises_when_not_found() -> None:
     ):
         service.update_robot(
             robot_id=999,
-            nome="Robô",
-            descricao="Descrição",
+            nome="Robô atualizado",
+            descricao="Nova descrição",
             intervalo=180,
             limite_tempo=480,
             nome_executavel="robo.exe",
             path_executavel=r"C:\robos",
             usuario_robo="usuario",
+            acao="A",
+            tela="N",
+            arquivo_ativacao="",
+            pasta_trabalho="",
+            repositorio_planilhas="",
+            notificados="",
+            pgm_ativado1="",
+            pgm_ativado2="",
+            horario_ativacao=None,
+            codigo_setor=1,
         )
 
 
@@ -212,13 +232,23 @@ def test_update_robot_rejects_empty_name() -> None:
     ):
         service.update_robot(
             robot_id=51,
-            nome="   ",
-            descricao="Descrição",
+            nome="",
+            descricao="Nova descrição",
             intervalo=180,
             limite_tempo=480,
             nome_executavel="robo.exe",
             path_executavel=r"C:\robos",
             usuario_robo="usuario",
+            acao="A",
+            tela="N",
+            arquivo_ativacao="",
+            pasta_trabalho="",
+            repositorio_planilhas="",
+            notificados="",
+            pgm_ativado1="",
+            pgm_ativado2="",
+            horario_ativacao=None,
+            codigo_setor=1,
         )
 
 

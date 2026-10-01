@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-from gestao_robos.config.logging_config import configurar_logging  # type: ignore[import-untyped]
+from gestao_robos.config.logging_config import configurar_logging
 
 
 def test_configurar_logging_cria_diretorio(tmp_path: Path) -> None:
